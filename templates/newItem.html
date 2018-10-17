@@ -1,0 +1,50 @@
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Catalog</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='responsive.css')}}">
+</head>
+
+<body>
+<h1> Add New Item </h1>
+
+<!--MESSAGE FLASHING EXAMPLE -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+
+<ul class="flash">
+{% for message in messages %}
+  <li><strong>{{message}}</strong></li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+<form action="{{url_for('newItem')}}" method = 'POST'>
+    <p>Category:</p>
+    <select type='text' name='itemCategory'>
+        {% for i in categories %}
+            <option value={{i.id}}>{{i.name}}</option>
+        {% endfor %}
+    </select>
+
+    <p>Name:</p>
+    <input type='text' size='30' name='name'>
+
+    <p>Description:</p>
+    <input type='text' size='100' name='description'>
+
+    <p>Price:</p>
+    <input type='text' size='30' name='price'>
+
+    <br><br><input type='submit' value='Add'>
+    <input type="button" value="Cancel" onclick="{{url_for('showCatalog')}}">
+</form>
+
+<a href= '{{url_for('showCatalog')}}'>Cancel</a>
+
+</body>
+</html>

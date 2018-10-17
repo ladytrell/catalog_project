@@ -1,0 +1,44 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Catalog</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='responsive.css')}}">
+</head>
+<body>
+
+<h1>Catalog Listings</h1>
+
+<!--MESSAGE FLASHING EXAMPLE -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+
+<ul class="flash">
+{% for message in messages %}
+  <li><strong>{{message}}</strong></li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+<a href = '{{url_for('newcatalog') }}'>Create New catalog</a>
+
+{% for i in catalogs %}
+
+<div>
+
+<p>{{i.name }}</p>
+<a href = '{{url_for('showMenu',catalog_id= i.id)}}'>View Menu</a> <br>
+<a href = '{{url_for('editcatalog',catalog_id= i.id)}}'>Edit catalog</a> <br>
+<a href = '{{url_for('deletecatalog',catalog_id= i.id)}}'>Delete catalog</a>
+
+</div>
+
+
+{% endfor %}
+</body>
+
+</html>
