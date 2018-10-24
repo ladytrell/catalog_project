@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en-US">      
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -9,42 +11,50 @@
 </head>
 
 <body>
-<h1> Edit Item </h1>
+<header class = "header container">
+    <h1 class = "inline">Catalog App</h1>
+</header>
 
-<!--MESSAGE FLASHING EXAMPLE -->
-{% with messages = get_flashed_messages() %}
-{% if messages %}
+<div class="pane">
+    <div class = "message">
+        <!--MESSAGE FLASHING EXAMPLE -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
 
-<ul class="flash">
-{% for message in messages %}
-  <li><strong>{{message}}</strong></li>
-  {% endfor %}
-</ul>
-{% endif %}
-{% endwith %}
+        <ul class="flash">
+        {% for message in messages %}
+          <li><strong>{{message}}</strong></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+    </div>
+    
+    <div class="details">
+        <h2> Edit Item </h2>
+        <form action="{{url_for('editItem',item_name= item.name)}}" method = 'POST'>
+            <p>Category:</p>
+            <select type='text' name='itemCategory'>
+                {% for i in categories %}
+                    <option value={{i.id}}>{{i.name}}</option>
+                {% endfor %}
+            </select>
 
-<form action="{{url_for('editItem',item_name= item.name)}}" method = 'POST'>
-    <p>Category:</p>
-    <select type='text' name='itemCategory'>
-        {% for i in categories %}
-            <option value={{i.id}}>{{i.name}}</option>
-        {% endfor %}
-    </select>
+            <p>Name:</p>
+            <input type='text' size='30' name='name' placeholder = '{{item.name}}'>
 
-    <p>Name:</p>
-    <input type='text' size='30' name='name' placeholder = '{{item.name}}'>
+            <p>Description:</p>
+            <input type='text' size='50' name='description' placeholder = '{{item.description}}'>
 
-    <p>Description:</p>
-    <input type='text' size='100' name='description' placeholder = '{{item.description}}'>
+            <p>Price:</p>
+            <input type='text' size='30' name='price' placeholder = '{{item.price}}'>
 
-    <p>Price:</p>
-    <input type='text' size='30' name='price' placeholder = '{{item.price}}'>
-
-    <br><br><input type='submit' value='Edit'>
-    <input type="button" value="Cancel" onclick="{{url_for('showCatalog')}}">
-</form>
-
+            <br><br><input type='submit' value='Edit'>
+            <!--<input type='button' value='Cancel' onclick='{{url_for('showCatalog')}}'>-->
+        </form>
+    
 <a href= '{{url_for('showCatalog')}}'>Cancel</a>
-
+    </div>
+</div>          
 </body>
 </html>

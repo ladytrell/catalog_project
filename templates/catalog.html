@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en-US">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -10,10 +11,10 @@
 </head>
 <body>
 <header class = "header container">
-    <h1 class = "inline">Catalog Listings</h1>
+    <h1 class = "inline">Catalog App</h1>
     {% if loggedIn %}
     <div class = "button">
-        <a class = "white" shref="{{url_for('disconnect')}}">Logout</a>
+        <a class = "white" href="{{url_for('disconnect')}}">Logout</a>
     </div>
     {% else %}
     <div class = "button inline">
@@ -22,20 +23,21 @@
     {% endif %}
 </header>
 <div class="pane">
-    <!--MESSAGE FLASHING EXAMPLE -->
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
+    <div class = "message">
+        <!--MESSAGE FLASHING EXAMPLE -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
 
-    <ul class="flash">
-    {% for message in messages %}
-      <li><strong>{{message}}</strong></li>
-      {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
+        <ul class="flash">
+        {% for message in messages %}
+          <li><strong>{{message}}</strong></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+    </div>
 
-
-    <div>
+    <div class="catalog">
         <div class="catagories">
         <h2>Categories</h2>
         {% for i in categories %}

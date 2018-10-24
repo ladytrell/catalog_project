@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE html>
+<html lang="en-US">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -9,36 +10,39 @@
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='responsive.css')}}">
 </head>
 <body>
-<div>
-    <h1>Catalog Listings</h1>
-</div
-<div>
-    <!--MESSAGE FLASHING EXAMPLE -->
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
 
-    <ul class="flash">
-    {% for message in messages %}
-      <li><strong>{{message}}</strong></li>
-    {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
+<header class = "header container">
+    <h1>Catalog App</h1>
+</header>
 
+<div class="pane">
+    <div class = "message">
+        <!--MESSAGE FLASHING EXAMPLE -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
 
-    <div>
-        <div>
+        <ul class="flash">
+        {% for message in messages %}
+          <li><strong>{{message}}</strong></li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="catalog">
+        <div class="catagories">
             <h2>Categories</h2>
             {% for i in categories %}
                 <a href = "{{url_for('showItems',category_name= i.name)}}">{{i.name}}</a> <br>
             {% endfor %}
         </div>
-        <div>
+        <div class="details">
             <h2>Delete Item</h2>    
             <p>Are you sure you want to delete {{item.name}}?</p>
             <form action="{{url_for('deleteItem', item_name= item.name) }}" method = 'POST'>
 
-                <input type='submit', value = 'Delete'>
+                <input type='submit' value = 'Delete'>
 
             </form>
                 

@@ -1,6 +1,7 @@
 body {
     font-family: sans-serif;
-    background-color: #8e7ae4
+    background-color: #8e7ae4;
+    margin: 0;
 }
 
 h1,
@@ -29,7 +30,7 @@ h2 {
 p,
 dd,
 dt {
-    color: #cccccc;
+    color: #1b1919;
 }
 
 a {
@@ -60,11 +61,15 @@ div {
 .catagories{
     display: inline-block;
     width: 30%;
+    margin: 10px;
+    vertical-align: top;
 }
 
 .details{    
     display: inline-block;
-    width: 55%;
+    width: 63%;
+    margin: 10px 10px 10px 0px;
+    vertical-align: top;
 }
 
 .pane {
@@ -79,6 +84,10 @@ div {
     background-color: #ffffff
 }
 
+.catalog {
+    vertical-align: text-bottom;
+}
+
 .header {
     #left: 50%;
     #text-align: center;
@@ -89,10 +98,13 @@ div {
 }
 
 .button {
-    line-height: 2em;
+    line-height: 1.5em;
     background-color: #f33007;
-    padding: 5 10px;
+    padding: 5px 10px;
     #display: inline-block;
+    #padding: 0px 5px;
+    height: 32px;
+    margin-top: 12px;    
 }
 
 .name {
@@ -106,14 +118,16 @@ div {
 
 .description {}
 
-.price {
-    text-align: right;
-    width: 50%;
-    float: right;
-}
-
 .editdeletepane {}
 
 .flash {
-    background: #cee5f5;
+    background: #42f4ee;
+}
+
+.google {
+    margin: 40px 25%;
+}
+
+.facebook {
+    margin: 20px 25%;
 }
