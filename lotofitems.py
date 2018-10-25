@@ -29,7 +29,10 @@ user2 = User(user_name="Antrell Kent", email="ladytrell@hotmail.com")
 session.add(user2)
 session.commit()
 
-# Menu for Findings
+# Item descriptions and prices from https://www.jewelrysupply.com and
+# https://www.firemountaingems.com
+
+# Findings
 category1 = Category(name="Findings")
 
 session.add(category1)
