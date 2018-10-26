@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, flash,\
-    jsonify
+from flask import (Flask, render_template, request,
+                   redirect, url_for, flash, jsonify)
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from catalogDB_Model import Category, Item, User, Base
@@ -42,7 +42,8 @@ def catalonJSON():
 
 @app.route('/catalog/<path:category_name>/items/JSON')
 def itemsJSON(category_name):
-    category = session.query(Category).filter_by(name=category_name).one()
+    category = session.query(Category).filter_by(name=category_name)\
+        .one_or_none()
     items = session.query(Item).filter_by(category_id=category.id)\
         .order_by(Item.name.desc())
     return jsonify(Item=[i.serialize for i in items])
@@ -50,10 +51,11 @@ def itemsJSON(category_name):
 
 @app.route('/catalog/<path:category_name>/<path:item_name>/JSON')
 def itemsDetailsJSON(category_name, item_name):
-    category = session.query(Category).filter_by(name=category_name).one()
+    category = session.query(Category).filter_by(name=category_name)\
+        .one_or_none()
     item = session.query(Item).join(Category)\
         .filter(Category.id == category.id)\
-        .filter(Item.name == item_name).one()
+        .filter(Item.name == item_name).one_or_none()
     return jsonify(Item=[item.serialize])
 
 
@@ -74,8 +76,10 @@ def showCatalog():
 @app.route('/catalog/<path:category_name>/')
 @app.route('/catalog/<path:category_name>/items/')
 def showItems(category_name):
+    """ List items in the specified category """
     categories = session.query(Category).order_by(Category.name)
-    category = session.query(Category).filter_by(name=category_name).one()
+    category = session.query(Category).filter_by(name=category_name)\
+        .one_or_none()
     items = session.query(Item).filter_by(category_id=category.id)\
         .order_by(Item.name.desc())
     num_items = session.query(Item).filter_by(category_id=category.id).count()
@@ -88,11 +92,13 @@ def showItems(category_name):
 
 @app.route('/catalog/<path:category_name>/<path:item_name>/')
 def showItemsDetails(category_name, item_name):
+    """ Display general item data """
     categories = session.query(Category).order_by(Category.name)
-    category = session.query(Category).filter_by(name=category_name).one()
+    category = session.query(Category).filter_by(name=category_name)\
+        .one_or_none()
     item = session.query(Item).join(Category)\
         .filter(Category.id == category.id).filter(Item.name == item_name)\
-        .one()
+        .one_or_none()
     # Check login status for display the proper button
     loggedIn = logIn()
     return render_template('item.html', categories=categories,
@@ -101,6 +107,7 @@ def showItemsDetails(category_name, item_name):
 
 @app.route('/catalog/newItem/', methods=['GET', 'POST'])
 def newItem():
+    """ Add an item to the database """
     loggedIn = logIn()
     # Redirect to login if not logged-in
     if not loggedIn:
@@ -111,7 +118,8 @@ def newItem():
                        description=request.form['description'],
                        price=request.form['price'],
                        category_id=request.form['itemCategory'],
-                       add_date=datetime.datetime.now())
+                       add_date=datetime.datetime.now(),
+                       user=getUserInfo(getUserID(login_session['email'])))
         session.add(newItem)
         session.commit()
         # Adding flash message
@@ -123,12 +131,13 @@ def newItem():
 
 @app.route('/catalog/<path:item_name>/edit/', methods=['GET', 'POST'])
 def editItem(item_name):
+    """ Modify details of an existing item """
     loggedIn = logIn()
     # Redirect to login if not logged-in
     if not loggedIn:
         return redirect(url_for('showLogin'))
     categories = session.query(Category).order_by(Category.name)
-    editIt = session.query(Item).filter(Item.name == item_name).one()
+    editIt = session.query(Item).filter(Item.name == item_name).one_or_none()
     # Confirm user owns/created the items
     if getUserID(login_session['email']) != editIt.user_id:
         return redirect(url_for('showCatalog'))
@@ -162,12 +171,13 @@ def editItem(item_name):
 
 @app.route('/catalog/<path:item_name>/delete/', methods=['GET', 'POST'])
 def deleteItem(item_name):
+    """ Delete an item from the database """
     # Check login status for display the proper button
     loggedIn = logIn()
     if not loggedIn:
         return redirect(url_for('showLogin'))
     categories = session.query(Category).order_by(Category.name)
-    deleteIt = session.query(Item).filter_by(name=item_name).one()
+    deleteIt = session.query(Item).filter_by(name=item_name).one_or_none()
     # Check if user owns the item
     if getUserID(login_session['email']) != deleteIt.user_id:
         return redirect(url_for('showCatalog'))
@@ -189,12 +199,13 @@ def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in xrange(32))
     login_session['state'] = state
-    return render_template('login.html', STATE=state)
+    return render_template('login.html', STATE=state, CLIENT_ID=CLIENT_ID)
 
 
 # Disconnect based on provider
 @app.route('/disconnect')
 def disconnect():
+    """ End Login for current authentication provider """
     if 'provider' in login_session:
         if login_session['provider'] == 'google':
             gdisconnect()
@@ -216,6 +227,7 @@ def disconnect():
 
 @app.route('/gdisconnect')
 def gdisconnect():
+    """ End Login Via Google """
     # Only disconnect a connected user.
     access_token = login_session.get('access_token')
     if access_token is None:
@@ -239,6 +251,7 @@ def gdisconnect():
 
 @app.route('/fbdisconnect')
 def fbdisconnect():
+    """ End Login Via Facebook """
     facebook_id = login_session['facebook_id']
     # The access token must me included to successfully logout
     access_token = login_session['access_token']
@@ -251,6 +264,7 @@ def fbdisconnect():
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
+    """ Google Authentication """
     # Validate state token
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter.'), 401)
@@ -329,10 +343,10 @@ def gconnect():
         user_id = createUser(login_session)
     login_session['user_id'] = user_id
 
-    output = ''
-    output += '<h1>Welcome, '
-    output += login_session['username']
-    output += '!</h1>'
+    # output = ''
+    # output += '<h1>Welcome, '
+    # output += login_session['username']
+    # output += '!</h1>'
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     return output
@@ -340,6 +354,7 @@ def gconnect():
 
 @app.route('/fbconnect', methods=['POST'])
 def fbconnect():
+    """ Facebook Authentication """
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter.'), 401)
         response.headers['Content-Type'] = 'application/json'
@@ -399,20 +414,21 @@ def createUser(login_session):
                    'email'])
     session.add(newUser)
     session.commit()
-    user = session.query(User).filter_by(email=login_session['email']).one()
+    user = session.query(User).filter_by(email=login_session['email'])\
+        .one_or_none()
     return user.id
 
 
 # Get Current user's data entry
 def getUserInfo(user_id):
-    user = session.query(User).filter_by(id=user_id).one()
+    user = session.query(User).filter_by(id=user_id).one_or_none()
     return user
 
 
 # Get Current users userID via email query
 def getUserID(email):
     try:
-        user = session.query(User).filter_by(email=email).one()
+        user = session.query(User).filter_by(email=email).one_or_none()
         return user.id
     except Exception:
         return None

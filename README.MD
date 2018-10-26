@@ -18,8 +18,20 @@ Catalog App uses a number of open source projects to work properly:
 5.	Run your application within the VM (python /vagrant/catalog/application.py)
 6.	Access and test your application by visiting http://localhost:8000 locally
 
+### JSON Endpoints
 
-And of course Catalog App itself is open source with a [public repository][dill]
+1.  List of categores
+   - http://localhost:8000/catalog/JSON
+
+2.  Replace category_name with the name of the desired category
+
+   - [http://localhost:8000/catalog/category_name/items/JSON]
+
+3.  Replace category_name with the name of the desired category and item_name with the name of the desired item
+
+   - [http://localhost:8000/catalog/category_name/item_name/JSON]
+
+And of course Catalog App itself is open source with a [public repository]
  on GitHub.
 
 ### Installation

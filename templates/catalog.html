@@ -39,20 +39,23 @@
 
     <div class="catalog">
         <div class="catagories">
-        <h2>Categories</h2>
-        {% for i in categories %}
-            <a href = "{{url_for('showItems',category_name= i.name)}}">{{i.name}}</a> <br>
-        {% endfor %}
+            <h2>Categories</h2>
+            {% for i in categories %}
+                <a href = "{{url_for('showItems',category_name= i.name)}}">{{i.name}}</a> <br>
+            {% endfor %}
         </div>
         <div class="details">
-        <h2>Latest Items</h2>    
-        {% for i in items %}            
-            {% for c in categories %}
-                {% if i.category_id == c.id %}
-                   <a href = "{{url_for('showItemsDetails',category_name= c.name, item_name = i.name)}}">{{i.name}}</a> ({{c.name}}) <br>
-                {% endif %}
-            {% endfor %}
-        {% endfor %}
+            <h2>Latest Items</h2>    
+            {% for i in items %}            
+                {% for c in categories %}
+                    {% if i.category_id == c.id %}
+                       <a href = "{{url_for('showItemsDetails',category_name= c.name, item_name = i.name)}}">{{i.name}}</a> ({{c.name}}) <br>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}    
+            <div class="newbutton">
+                <a class = "white" href="{{url_for('newItem')}}">Create New Item</a>
+            </div>
         </div>
     </div>
 </div>    
