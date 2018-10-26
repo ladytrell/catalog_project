@@ -49,7 +49,7 @@ def catalogJSON():
     return jsonify(Category=[i.serialize for i in categories],
                    Item=[i.serialize for i in items])
 
- 
+
 @app.route('/catalog/<path:category_name>/JSON')
 @app.route('/catalog/<path:category_name>/items/JSON')
 def itemsJSON(category_name):
