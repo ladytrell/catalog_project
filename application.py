@@ -1,8 +1,16 @@
-from flask import (Flask, render_template, request,
-                   redirect, url_for, flash, jsonify)
+from flask import (Flask,
+                   render_template,
+                   request,
+                   redirect,
+                   url_for,
+                   flash,
+                   jsonify)
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from catalogDB_Model import Category, Item, User, Base
+from catalogDB_Model import (Category,
+                             Item,
+                             User,
+                             Base)
 import datetime
 
 from flask import session as login_session
@@ -35,28 +43,20 @@ APPLICATION_NAME = "Catalog App"
 
 # JSON Endpoints
 @app.route('/catalog/JSON')
-def catalonJSON():
+def catalogJSON():
     categories = session.query(Category).order_by(Category.name)
-    return jsonify(Category=[i.serialize for i in categories])
+    items = session.query(Item)
+    return jsonify(Category=[i.serialize for i in categories],
+                   Item=[i.serialize for i in items])
 
-
+ 
+@app.route('/catalog/<path:category_name>/JSON')
 @app.route('/catalog/<path:category_name>/items/JSON')
 def itemsJSON(category_name):
     category = session.query(Category).filter_by(name=category_name)\
         .one_or_none()
-    items = session.query(Item).filter_by(category_id=category.id)\
-        .order_by(Item.name.desc())
+    items = session.query(Item).filter_by(category_id=category.id)
     return jsonify(Item=[i.serialize for i in items])
-
-
-@app.route('/catalog/<path:category_name>/<path:item_name>/JSON')
-def itemsDetailsJSON(category_name, item_name):
-    category = session.query(Category).filter_by(name=category_name)\
-        .one_or_none()
-    item = session.query(Item).join(Category)\
-        .filter(Category.id == category.id)\
-        .filter(Item.name == item_name).one_or_none()
-    return jsonify(Item=[item.serialize])
 
 
 @app.route('/')
@@ -343,12 +343,11 @@ def gconnect():
         user_id = createUser(login_session)
     login_session['user_id'] = user_id
 
-    # output = ''
-    # output += '<h1>Welcome, '
-    # output += login_session['username']
-    # output += '!</h1>'
+    output = ''
+    output += '<h1>Welcome, '
+    output += login_session['username']
+    output += '!</h1>'
     flash("you are now logged in as %s" % login_session['username'])
-    print "done!"
     return output
 
 
@@ -398,10 +397,10 @@ def fbconnect():
     login_session['user_id'] = user_id
 
     # Add back after developing code to control display location
-    # output = ''
-    # output += '<h2>Welcome, '
-    # output += login_session['username']
-    # output += '!</h2>'
+    output = ''
+    output += '<h2>Welcome, '
+    output += login_session['username']
+    output += '!</h2>'
 
     flash("Now logged in as %s" % login_session['username'])
     return output

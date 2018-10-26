@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 
-from catalogDB_model import Category, Base, Item, User
+from catalogDB_Model import Category, Base, Item, User
 
 engine = create_engine('sqlite:///catalog.db',
                        connect_args={'check_same_thread': False})
