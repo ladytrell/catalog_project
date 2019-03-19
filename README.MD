@@ -1,11 +1,10 @@
 # Catalog App
 
-Catalog App is a web application for jewerly crafts items.
+Catalog App is a web application for catagloing jewerly craftig items.
 
   - Items grouped into catagories
   - Item modification authentication protected
   - Third party login authentication
-
 
 ### How to Execute the App
 
@@ -27,27 +26,18 @@ Catalog App uses a number of open source projects to work properly:
    - http://localhost:8000/catalog/JSON
 
 2.  Replace category_name with the name of the desired category
-
    - [http://localhost:8000/catalog/category_name/items/JSON]
 
 3.  Replace category_name with the name of the desired category and item_name with the name of the desired item
-
    - [http://localhost:8000/catalog/category_name/item_name/JSON]
 
-And of course Catalog App itself is open source with a [public repository]
- on GitHub.
-
 ### Installation
-clone or download to /vagrant/catalog
-https://github.com/ladytrell/catalog_project
-
-
-Verify the deployment by navigating to your server address in your preferred browser.
+1. Clone or download https://github.com/ladytrell/catalog_project to to /vagrant/catalog
+2. Verify the deployment by navigating to your server address in your preferred browser.
 
 ```sh
 127.0.0.1:8000
 ```
-
 
 ### Todos
 
